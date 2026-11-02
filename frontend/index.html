@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>College ERP — Integrated Academic Management System</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .landing { min-height: 100vh; background: #ffffff; display: flex; flex-direction: column; }
+    .land-nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; height: 68px;
+      border-bottom: 1px solid var(--slate-100);
+      position: sticky; top: 0; background: rgba(255,255,255,.92);
+      backdrop-filter: blur(10px); z-index: 50;
+    }
+    .land-nav-logo { display: flex; align-items: center; gap: 12px; }
+    .land-nav-logo .logo-icon { width: 36px; height: 36px; background: linear-gradient(135deg, var(--blue-600), var(--blue-500)); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+    .land-nav-logo .logo-icon svg { width: 20px; height: 20px; color: #fff; }
+    .land-nav-logo span { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 17px; font-weight: 800; color: var(--slate-900); }
+    .land-nav-actions { display: flex; gap: 10px; }
+
+    .hero {
+      flex: 1; display: flex; align-items: center; justify-content: center;
+      flex-direction: column; text-align: center;
+      padding: 70px 24px 50px;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--blue-50); border: 1px solid var(--blue-100);
+      color: var(--blue-700); font-size: 12px; font-weight: 700;
+      padding: 6px 14px; border-radius: 20px; margin-bottom: 24px;
+      letter-spacing: .03em; text-transform: uppercase;
+    }
+    .hero-badge span { width: 7px; height: 7px; background: var(--blue-500); border-radius: 50%; }
+    .hero h1 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: clamp(32px, 5vw, 56px); font-weight: 800;
+      color: var(--slate-900); line-height: 1.15; max-width: 820px;
+      letter-spacing: -.03em; margin-bottom: 20px;
+    }
+    .hero h1 em { font-style: normal; color: var(--blue-600); }
+    .hero p {
+      font-size: 17px; color: var(--slate-500); max-width: 600px;
+      line-height: 1.7; margin-bottom: 36px;
+    }
+    .hero-cta { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+
+    .portals { padding: 40px 48px 80px; }
+    .portals-header { text-align: center; margin-bottom: 40px; }
+    .portals-header h2 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 32px; font-weight: 800; color: var(--slate-900); margin-bottom: 8px; }
+    .portals-header p  { font-size: 15px; color: var(--slate-500); }
+
+    .portals-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px; max-width: 1050px; margin: 0 auto;
+    }
+    .portal-card {
+      border-radius: var(--radius-xl); padding: 36px 30px;
+      border: 1px solid var(--slate-100); box-shadow: var(--shadow-sm);
+      transition: var(--transition); display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .portal-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+    .portal-card.admin { background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); color: white; }
+    .portal-card.staff { background: linear-gradient(135deg, #0f766e 0%, #0d9488 100%); color: white; }
+    .portal-card.student { background: var(--white); border: 2px solid var(--blue-100); }
+
+    .features { padding: 60px 48px; background: var(--slate-50); border-top: 1px solid var(--slate-100); }
+    .features-header { text-align: center; margin-bottom: 48px; }
+    .features-header h2 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 30px; font-weight: 800; color: var(--slate-900); margin-bottom: 8px; }
+    .features-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px; max-width: 1100px; margin: 0 auto;
+    }
+    .feature-card { background: white; border: 1px solid var(--slate-100); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-sm); }
+    .feature-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+    .feature-card h3 { font-size: 16px; font-weight: 700; color: var(--slate-900); margin-bottom: 6px; }
+    .feature-card p { font-size: 13px; color: var(--slate-500); line-height: 1.6; }
+
+    footer { padding: 32px 48px; text-align: center; border-top: 1px solid var(--slate-100); font-size: 13px; color: var(--slate-400); }
+  </style>
+</head>
+<body class="landing">
+
+<nav class="land-nav">
+  <div class="land-nav-logo">
+    <div class="logo-icon">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
+      </svg>
+    </div>
+    <span>College ERP</span>
+  </div>
+  <div class="land-nav-actions">
+    <a href="login.html" class="btn btn-primary btn-sm">Sign In to Portal</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-badge"><span></span> MongoDB Powered Academic Management</div>
+  <h1>Academic ERP System for <em>Higher Education</em></h1>
+  <p>Streamlined academic management across Student Details, Final-Year Project Reports, Internship Tracking, Semester Marks, and CIA Assessments.</p>
+  <div class="hero-cta">
+    <a href="login.html" class="btn btn-primary btn-lg">Access ERP Portal →</a>
+  </div>
+</section>
+
+<!-- 3 Portals -->
+<section class="portals">
+  <div class="portals-header">
+    <h2>Select Your Portal</h2>
+    <p>Sign in using your role-based college credentials</p>
+  </div>
+  <div class="portals-grid">
+    <!-- Admin Portal -->
+    <div class="portal-card admin">
+      <div>
+        <span style="font-size:12px;text-transform:uppercase;letter-spacing:.08em;opacity:.8;font-weight:700;">Role 01</span>
+        <h3 style="font-size:22px;margin:8px 0 12px;color:white;">Administrator Portal</h3>
+        <p style="font-size:14px;opacity:.85;line-height:1.6;margin-bottom:24px;">Full administrative authority to manage all student profiles, staff accounts, project reports, semester grades, and CIA assessments.</p>
+      </div>
+      <a href="login.html" class="btn" style="background:white;color:#1e3a8a;font-weight:700;">Admin Sign In →</a>
+    </div>
+
+    <!-- Staff Portal -->
+    <div class="portal-card staff">
+      <div>
+        <span style="font-size:12px;text-transform:uppercase;letter-spacing:.08em;opacity:.8;font-weight:700;">Role 02</span>
+        <h3 style="font-size:22px;margin:8px 0 12px;color:white;">Staff / Faculty Portal</h3>
+        <p style="font-size:14px;opacity:.85;line-height:1.6;margin-bottom:24px;">Manage and mentor assigned students. Upload project reports, evaluate internship documentation, and enter semester &amp; CIA marks.</p>
+      </div>
+      <a href="login.html" class="btn" style="background:white;color:#0f766e;font-weight:700;">Staff Sign In →</a>
+    </div>
+
+    <!-- Student Portal -->
+    <div class="portal-card student">
+      <div>
+        <span style="font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--blue-600);font-weight:700;">Role 03</span>
+        <h3 style="font-size:22px;margin:8px 0 12px;color:var(--slate-900);">Student Portal</h3>
+        <p style="font-size:14px;color:var(--slate-500);line-height:1.6;margin-bottom:24px;">View your student details, review and download your approved project and internship reports, and check semester and CIA scores.</p>
+      </div>
+      <a href="login.html" class="btn btn-primary" style="font-weight:700;">Student Sign In →</a>
+    </div>
+  </div>
+</section>
+
+<!-- Exactly the 6 Core Modules -->
+<section class="features">
+  <div class="features-header">
+    <h2>The 6 Academic ERP Modules</h2>
+    <p>Focused strictly on academic evaluation, project documentation, and student details</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#eff6ff;color:#2563eb;">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      </div>
+      <h3>1. Student Details</h3>
+      <p>Name, register number, roll number, department, course, academic year, batch, email, phone, and student credentials.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#fffbeb;color:#d97706;">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+      </div>
+      <h3>2. Final-Year Project Report</h3>
+      <p>Project title, description, technology used, project guide, submission date, and secure PDF report document downloads.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#f0fdf4;color:#16a34a;">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+      </div>
+      <h3>3. Internship Project Report</h3>
+      <p>Company name, domain, internship project title, technology, duration, status, report PDF, and internship certificates.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#f5f3ff;color:#7c3aed;">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+      </div>
+      <h3>4. Semester Mark List</h3>
+      <p>Official university semester examination marks, subject codes, subject names, max and obtained marks, and result status.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#fef2f2;color:#dc2626;">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+      </div>
+      <h3>5. CIA 1 Mark List</h3>
+      <p>Continuous Internal Assessment 1 results with exam dates, configured max marks validation, and result status.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#ecfdf5;color:#059669;">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+      </div>
+      <h3>6. CIA 2 / CIA 3 Mark Lists</h3>
+      <p>Separately categorized CIA 2 and CIA 3 evaluations preventing cross-assessment mix-ups with mark boundary checks.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 College ERP · Full-Stack Academic System powered by Node.js &amp; MongoDB</p>
+</footer>
+
+</body>
+</html>

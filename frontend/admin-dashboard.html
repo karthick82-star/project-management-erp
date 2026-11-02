@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard — College ERP</title>
+  <script>
+    // Admin role has been removed. Only Staff and Student roles are supported.
+    window.location.replace('login.html');
+  </script>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .sub-tabs { display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 1px solid var(--slate-200); padding-bottom: 10px; }
+    .sub-tab { padding: 8px 16px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; cursor: pointer; color: var(--slate-600); background: var(--slate-100); transition: var(--transition); }
+    .sub-tab.active { background: var(--blue-600); color: var(--white); }
+  </style>
+</head>
+<body>
+<div id="sidebar-backdrop" class="overlay-backdrop"></div>
+<div id="toast-container" class="toast-container"></div>
+
+<div class="dashboard-layout">
+
+  <!-- ════════ SIDEBAR ════════ -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
+        </svg>
+      </div>
+      <div class="logo-text"><h2>College ERP</h2><span>Admin Console</span></div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Overview</div>
+      <div class="nav-item active" data-section="dashboard" onclick="navigateTo('dashboard')">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        Dashboard
+      </div>
+
+      <div class="nav-section-label">Academic Modules</div>
+      <!-- Module 1 -->
+      <div class="nav-item" data-section="students" onclick="navigateTo('students')">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        Student Details
+      </div>
+
+      <!-- Module 2 -->
+      <div class="nav-item" data-section="finalprojects" onclick="navigateTo('finalprojects')">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        Final-Year Project Report
+      </div>
+
+      <!-- Module 3 -->
+      <div class="nav-item" data-section="internships" onclick="navigateTo('internships')">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        Internship Project Report
+      </div>
+
+      <!-- Module 4 -->
+      <div class="nav-item" data-section="semestermarks" onclick="navigateTo('semestermarks')">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+        Semester Mark List
+      </div>
+
+      <!-- Module 5: CIA Marks (Unified) -->
+      <div class="nav-item" data-section="ciamarks" onclick="navigateTo('ciamarks')">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+        CIA Marks
+      </div>
+
+      <div class="nav-section-label">Administration</div>
+      <div class="nav-item" data-section="staff" onclick="navigateTo('staff')">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+        Faculty &amp; Staff Accounts
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-card">
+        <div class="user-avatar" id="admin-avatar">AD</div>
+        <div class="user-info"><strong id="admin-name">Administrator</strong><span>Admin</span></div>
+        <button class="logout-btn" onclick="Auth.logout()" title="Logout">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ════════ MAIN CONTENT ════════ -->
+  <div class="main-content">
+    <header class="topbar">
+      <button class="icon-btn menu-toggle" id="menu-toggle">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <div class="topbar-title">
+        <h1 id="topbar-title">Dashboard</h1>
+        <p id="topbar-sub">Academic overview &amp; key metrics</p>
+      </div>
+      <div class="topbar-actions">
+        <button class="btn btn-secondary btn-sm" onclick="refreshCurrentSection()">Refresh</button>
+        <button class="btn btn-danger btn-sm" onclick="Auth.logout()">Logout</button>
+      </div>
+    </header>
+
+    <div class="page-content">
+
+      <!-- ════ DASHBOARD OVERVIEW ════ -->
+      <div id="section-dashboard" class="section active fade-in">
+        <!-- Exactly 5 requested summary cards -->
+        <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+          <div class="stat-card">
+            <div class="stat-icon blue">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            </div>
+            <div class="stat-info"><h3 id="stat-students">—</h3><p>Total Students</p></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon amber">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            </div>
+            <div class="stat-info"><h3 id="stat-fyp">—</h3><p>Final-Year Projects</p></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon green">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            </div>
+            <div class="stat-info"><h3 id="stat-internships">—</h3><p>Internship Reports</p></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon blue">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+            </div>
+            <div class="stat-info"><h3 id="stat-semester-marks">—</h3><p>Semester Marks</p></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon red">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+            </div>
+            <div class="stat-info"><h3 id="stat-cia-marks">—</h3><p>CIA Records</p></div>
+          </div>
+        </div>
+
+        <div class="two-col-grid">
+          <div class="card">
+            <div class="card-header">
+              <div><h3>Quick Actions</h3><p>Direct academic operations</p></div>
+            </div>
+            <div class="card-body" style="display:flex;flex-direction:column;gap:10px;">
+              <button class="btn btn-primary" onclick="openAddStudentModal()" style="justify-content:flex-start;">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
+                Add New Student
+              </button>
+              <button class="btn btn-outline" onclick="openAddFypModal()" style="justify-content:flex-start;">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                Add Final-Year Project Report
+              </button>
+              <button class="btn btn-outline" onclick="openAddInternshipModal()" style="justify-content:flex-start;">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                Add Internship Project Report
+              </button>
+              <button class="btn btn-secondary" onclick="openAddSemesterMarkModal()" style="justify-content:flex-start;">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                Enter Semester Marks
+              </button>
+              <button class="btn btn-secondary" onclick="openAddCiaMarkModal('CIA 1')" style="justify-content:flex-start;">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                Enter CIA Assessment Marks
+              </button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <div><h3>System Overview</h3><p>MongoDB Persistence Active</p></div>
+            </div>
+            <div class="card-body">
+              <div style="display:flex;flex-direction:column;gap:12px;">
+                <div style="background:var(--slate-50);padding:14px;border-radius:var(--radius-md);border:1px solid var(--slate-100);">
+                  <strong style="color:var(--slate-800);display:block;margin-bottom:4px;">MongoDB Database Connection</strong>
+                  <p style="font-size:13px;color:var(--slate-500);">Connected to local database. All data persisted across users, students, project reports, and assessments.</p>
+                </div>
+                <div style="background:var(--slate-50);padding:14px;border-radius:var(--radius-md);border:1px solid var(--slate-100);">
+                  <strong style="color:var(--slate-800);display:block;margin-bottom:4px;">Strict Role-Based Access Control</strong>
+                  <p style="font-size:13px;color:var(--slate-500);">Enforcing Admin, Staff, and Student authorization boundaries on both API and user interface.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════ MODULE 1: STUDENT DETAILS ════ -->
+      <div id="section-students" class="section fade-in">
+        <div class="card">
+          <div class="card-header">
+            <div><h3>Student Details</h3><p>Manage college students and batches</p></div>
+            <button class="btn btn-primary" onclick="openAddStudentModal()">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+              Add Student
+            </button>
+          </div>
+          <div class="table-toolbar">
+            <div class="search-box">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              <input type="text" id="student-search" placeholder="Search by name, reg no, umis id..." oninput="filterStudents()">
+            </div>
+            <div style="display:flex;gap:10px;">
+              <select id="student-batch-filter" class="form-control" style="width:auto;" onchange="filterStudents()">
+                <option value="">All Batches</option>
+                <option value="2023">2023 Batch</option>
+                <option value="2024">2024 Batch</option>
+                <option value="2025">2025 Batch</option>
+              </select>
+              <select id="student-dept-filter" class="form-control" style="width:auto;" onchange="filterStudents()">
+                <option value="">All Departments</option>
+              </select>
+            </div>
+          </div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Student Name</th>
+                  <th>Register No</th>
+                  <th>UMIS ID</th>
+                  <th>Department</th>
+                  <th>Course &amp; Academic Year</th>
+                  <th>Batch</th>
+                  <th>Email / Phone</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="students-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════ MODULE 2: FINAL-YEAR PROJECT REPORT ════ -->
+      <div id="section-finalprojects" class="section fade-in">
+        <div class="card">
+          <div class="card-header">
+            <div><h3>Final-Year Project Reports</h3><p>Review and manage student final year project documentation</p></div>
+            <button class="btn btn-primary" onclick="openAddFypModal()">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+              Add Project Report
+            </button>
+          </div>
+          <div class="table-toolbar">
+            <div class="search-box">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              <input type="text" id="fyp-search" placeholder="Search projects by title, student, guide..." oninput="filterFyp()">
+            </div>
+          </div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Student Name</th>
+                  <th>Register No</th>
+                  <th>Project Title</th>
+                  <th>Technology</th>
+                  <th>Guide</th>
+                  <th>Submission Date</th>
+                  <th>Report PDF</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="fyp-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════ MODULE 3: INTERNSHIP PROJECT REPORT ════ -->
+      <div id="section-internships" class="section fade-in">
+        <div class="card">
+          <div class="card-header">
+            <div><h3>Internship Project Reports</h3><p>Track student internships, companies, domains, and certificates</p></div>
+            <button class="btn btn-primary" onclick="openAddInternshipModal()">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+              Add Internship Report
+            </button>
+          </div>
+          <div class="table-toolbar">
+            <div class="search-box">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              <input type="text" id="internship-search" placeholder="Search by student, company, domain, title..." oninput="filterInternships()">
+            </div>
+          </div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Student Name</th>
+                  <th>Register No</th>
+                  <th>Company Name</th>
+                  <th>Domain</th>
+                  <th>Project Title</th>
+                  <th>Duration</th>
+                  <th>Status</th>
+                  <th>Report &amp; Cert</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="internships-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════ MODULE 4: SEMESTER MARK LIST ════ -->
+      <div id="section-semestermarks" class="section fade-in">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h3>Semester Mark List</h3>
+              <p>Manage official university semester examination grades (Split by Batch &amp; Semester 1-6)</p>
+            </div>
+            <button class="btn btn-primary" onclick="openAddSemesterMarkModal()">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+              Enter Semester Marks
+            </button>
+          </div>
+
+          <!-- Split Filter Controls: Batch (2026, 2025, 2024) and Semester (1 to 6) -->
+          <div class="mark-split-container">
+            <div class="filter-group-row">
+              <span class="filter-group-label">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                Batch Split:
+              </span>
+              <div class="filter-pills" id="batch-filter-pills">
+                <div class="filter-pill active" id="pill-batch-all" onclick="selectBatchFilter('')">All Batches</div>
+                <div class="filter-pill filter-pill-batch-2023" id="pill-batch-2023" onclick="selectBatchFilter('2023')">🎓 2023 Batch</div>
+                <div class="filter-pill filter-pill-batch-2024" id="pill-batch-2024" onclick="selectBatchFilter('2024')">📘 2024 Batch</div>
+                <div class="filter-pill filter-pill-batch-2025" id="pill-batch-2025" onclick="selectBatchFilter('2025')">⚡ 2025 Batch</div>
+              </div>
+            </div>
+
+            <div class="filter-group-row">
+              <span class="filter-group-label">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                Semester (1-6):
+              </span>
+              <div class="filter-pills" id="sem-filter-pills">
+                <div class="filter-pill active" id="pill-sem-all" onclick="selectSemFilter('')">All Semesters</div>
+                <div class="filter-pill" id="pill-sem-1" onclick="selectSemFilter('1')">Sem 1</div>
+                <div class="filter-pill" id="pill-sem-2" onclick="selectSemFilter('2')">Sem 2</div>
+                <div class="filter-pill" id="pill-sem-3" onclick="selectSemFilter('3')">Sem 3</div>
+                <div class="filter-pill" id="pill-sem-4" onclick="selectSemFilter('4')">Sem 4</div>
+                <div class="filter-pill" id="pill-sem-5" onclick="selectSemFilter('5')">Sem 5</div>
+                <div class="filter-pill" id="pill-sem-6" onclick="selectSemFilter('6')">Sem 6</div>
+              </div>
+            </div>
+
+            <div class="filter-status-bar">
+              <div>
+                <strong>Active Filter:</strong>
+                <span id="sem-filter-status-batch" class="badge badge-info" style="margin-left:6px;">All Batches</span>
+                <span style="margin: 0 4px; color: var(--slate-400);">•</span>
+                <span id="sem-filter-status-sem" class="badge badge-info">All Semesters</span>
+                <span style="margin-left: 10px; color: var(--slate-500);" id="sem-filter-count-badge">(Loading...)</span>
+              </div>
+              <button class="btn btn-secondary btn-sm" onclick="resetSemesterFilters()" style="padding:4px 10px; font-size:12px;">Reset Filters</button>
+            </div>
+          </div>
+
+          <div class="table-toolbar">
+            <div class="search-box">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              <input type="text" id="sem-mark-search" placeholder="Search by student, reg no, subject, batch..." oninput="filterSemesterMarks()">
+            </div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              <select id="sem-batch-filter" class="form-control" style="width:auto;" onchange="onBatchDropdownChange()">
+                <option value="">All Batches</option>
+                <option value="2023">2023 Batch</option>
+                <option value="2024">2024 Batch</option>
+                <option value="2025">2025 Batch</option>
+              </select>
+              <select id="sem-filter" class="form-control" style="width:auto;" onchange="onSemDropdownChange()">
+                <option value="">All Semesters</option>
+                <option value="1">Semester 1</option>
+                <option value="2">Semester 2</option>
+                <option value="3">Semester 3</option>
+                <option value="4">Semester 4</option>
+                <option value="5">Semester 5</option>
+                <option value="6">Semester 6</option>
+                <option value="7">Semester 7</option>
+                <option value="8">Semester 8</option>
+              </select>
+            </div>
+          </div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Student Name</th>
+                  <th>Register No</th>
+                  <th>Batch</th>
+                  <th>Semester</th>
+                  <th>Subject Code</th>
+                  <th>Subject Name</th>
+                  <th>Marks (Obt / Max)</th>
+                  <th>Result</th>
+                  <th>Academic Year</th>
+                  <th>Detailed View</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="semestermarks-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════ MODULE 5: CIA MARKS (UNIFIED CIA 1, CIA 2, CIA 3) ════ -->
+      <div id="section-ciamarks" class="section fade-in">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h3>CIA Marks</h3>
+              <p>Continuous Internal Assessment (CIA 1, CIA 2, CIA 3) Marks &amp; Results</p>
+            </div>
+            <button class="btn btn-primary" onclick="openAddCiaMarkModal()">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+              Enter CIA Marks
+            </button>
+          </div>
+
+          <!-- CIA Filter Splits: Assessment (All, CIA 1, CIA 2, CIA 3), Batch (2024, 2023, 2025), Semester (1-6) -->
+          <div class="mark-split-container">
+            <!-- 1. Assessment Split -->
+            <div class="filter-group-row">
+              <span class="filter-group-label">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                Assessment:
+              </span>
+              <div class="filter-pills" id="admin-cia-type-pills">
+                <div class="filter-pill active" id="admin-pill-cia-type-all" onclick="selectAdminCiaTypeFilter('')">All CIA</div>
+                <div class="filter-pill" id="admin-pill-cia-type-1" onclick="selectAdminCiaTypeFilter('CIA 1')">CIA 1</div>
+                <div class="filter-pill" id="admin-pill-cia-type-2" onclick="selectAdminCiaTypeFilter('CIA 2')">CIA 2</div>
+                <div class="filter-pill" id="admin-pill-cia-type-3" onclick="selectAdminCiaTypeFilter('CIA 3')">CIA 3</div>
+              </div>
+            </div>
+
+            <!-- 2. Batch Split -->
+            <div class="filter-group-row">
+              <span class="filter-group-label">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                Batch Split:
+              </span>
+              <div class="filter-pills" id="admin-cia-batch-pills">
+                <div class="filter-pill active" id="admin-pill-cia-batch-all" onclick="selectAdminCiaBatchFilter('')">All Batches</div>
+                <div class="filter-pill filter-pill-batch-2024" id="admin-pill-cia-batch-2024" onclick="selectAdminCiaBatchFilter('2024')">📘 2024 Batch</div>
+                <div class="filter-pill filter-pill-batch-2023" id="admin-pill-cia-batch-2023" onclick="selectAdminCiaBatchFilter('2023')">🎓 2023 Batch</div>
+                <div class="filter-pill filter-pill-batch-2025" id="admin-pill-cia-batch-2025" onclick="selectAdminCiaBatchFilter('2025')">⚡ 2025 Batch</div>
+              </div>
+            </div>
+
+            <!-- 3. Semester Split (1 to 6) -->
+            <div class="filter-group-row">
+              <span class="filter-group-label">
+                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                Semester (1-6):
+              </span>
+              <div class="filter-pills" id="admin-cia-sem-pills">
+                <div class="filter-pill active" id="admin-pill-cia-sem-all" onclick="selectAdminCiaSemFilter('')">All Semesters</div>
+                <div class="filter-pill" id="admin-pill-cia-sem-1" onclick="selectAdminCiaSemFilter('1')">Sem 1</div>
+                <div class="filter-pill" id="admin-pill-cia-sem-2" onclick="selectAdminCiaSemFilter('2')">Sem 2</div>
+                <div class="filter-pill" id="admin-pill-cia-sem-3" onclick="selectAdminCiaSemFilter('3')">Sem 3</div>
+                <div class="filter-pill" id="admin-pill-cia-sem-4" onclick="selectAdminCiaSemFilter('4')">Sem 4</div>
+                <div class="filter-pill" id="admin-pill-cia-sem-5" onclick="selectAdminCiaSemFilter('5')">Sem 5</div>
+                <div class="filter-pill" id="admin-pill-cia-sem-6" onclick="selectAdminCiaSemFilter('6')">Sem 6</div>
+              </div>
+            </div>
+
+            <div class="filter-status-bar">
+              <div>
+                <strong>Active Filter:</strong>
+                <span id="admin-cia-type-label" class="badge badge-success" style="margin-left:6px;">All CIA</span>
+                <span id="admin-cia-batch-label" class="badge badge-primary" style="margin-left:6px;">All Batches</span>
+                <span id="admin-cia-sem-label" class="badge badge-info" style="margin-left:6px;">All Semesters</span>
+                <span style="margin-left: 10px; color: var(--slate-500);" id="admin-cia-count-badge">(Loading...)</span>
+              </div>
+              <button class="btn btn-secondary btn-sm" onclick="resetAdminCiaFilters()" style="padding:4px 10px; font-size:12px;">Reset Filters</button>
+            </div>
+          </div>
+
+          <div class="table-toolbar">
+            <div class="search-box">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              <input type="text" id="ciamarks-search" placeholder="Search by student, reg no, subject..." oninput="filterCiaMarks()">
+            </div>
+          </div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Student Name</th>
+                  <th>Register No</th>
+                  <th>Assessment</th>
+                  <th>Semester</th>
+                  <th>Subject Code</th>
+                  <th>Subject Name</th>
+                  <th>Marks (Obt / Max)</th>
+                  <th>Exam Date</th>
+                  <th>Result</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="ciamarks-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════ STAFF MANAGEMENT ════ -->
+      <div id="section-staff" class="section fade-in">
+        <div class="card">
+          <div class="card-header">
+            <div><h3>Faculty &amp; Staff Accounts</h3><p>Manage staff credentials and departmental faculty directory</p></div>
+            <button class="btn btn-primary" onclick="openAddStaffModal()">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+              Add Staff Member
+            </button>
+          </div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Staff Name</th>
+                  <th>Email</th>
+                  <th>Department</th>
+                  <th>Phone</th>
+                  <th>Assigned Students</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="staff-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /page-content -->
+  </div><!-- /main-content -->
+</div><!-- /dashboard-layout -->
+
+<!-- ══════════ MODALS ══════════ -->
+
+<!-- Add/Edit Student Modal -->
+<div id="student-modal" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div><h3 id="student-modal-title">Add New Student</h3><p>Module 1: Student details &amp; credentials</p></div>
+      <button class="modal-close" onclick="closeModal('student-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <form id="student-form" onsubmit="saveStudent(event)">
+        <input type="hidden" id="s-id">
+        <div class="form-grid">
+          <div class="form-group"><label class="form-label">Student Name *</label><input type="text" id="s-name" class="form-control" required placeholder="Full Name"></div>
+          <div class="form-group"><label class="form-label">Register Number *</label><input type="text" id="s-regno" class="form-control" required placeholder="24SCC4501"></div>
+          <div class="form-group"><label class="form-label">UMIS ID *</label><input type="text" id="s-umis" class="form-control" required placeholder="9002785471"></div>
+          <div class="form-group"><label class="form-label">Department *</label><input type="text" id="s-dept" class="form-control" required placeholder="Computer Science and Engineering"></div>
+          <div class="form-group"><label class="form-label">Course *</label><input type="text" id="s-course" class="form-control" required placeholder="B.E. Computer Science and Engineering"></div>
+          <div class="form-group"><label class="form-label">Academic Year *</label><input type="text" id="s-academicyear" class="form-control" required placeholder="2022 - 2026"></div>
+          <div class="form-group"><label class="form-label">Batch *</label><input type="text" id="s-batch" class="form-control" required placeholder="2022-2026"></div>
+          <div class="form-group"><label class="form-label">Email Address *</label><input type="email" id="s-email" class="form-control" required placeholder="student@college.edu"></div>
+          <div class="form-group"><label class="form-label">Phone Number *</label><input type="tel" id="s-phone" class="form-control" required placeholder="9876543210"></div>
+          <div class="form-group" id="s-password-group"><label class="form-label">Password</label><input type="password" id="s-password" class="form-control" placeholder="Default: student123"></div>
+        </div>
+        <div class="form-actions" style="margin-top:20px;">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('student-modal')">Cancel</button>
+          <button type="submit" id="save-student-btn" class="btn btn-primary">Save Student</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Add/Edit FYP Modal -->
+<div id="fyp-modal" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div><h3 id="fyp-modal-title">Final-Year Project Report</h3><p>Module 2: Project details &amp; PDF submission</p></div>
+      <button class="modal-close" onclick="closeModal('fyp-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <form id="fyp-form" onsubmit="saveFyp(event)">
+        <input type="hidden" id="fyp-id">
+        <div class="form-grid">
+          <div class="form-group"><label class="form-label">Student Register Number *</label><input type="text" id="fyp-regno" class="form-control" required placeholder="REG2022001"></div>
+          <div class="form-group"><label class="form-label">Project Title *</label><input type="text" id="fyp-title" class="form-control" required placeholder="e.g. AI-Powered College ERP"></div>
+          <div class="form-group"><label class="form-label">Technology Used</label><input type="text" id="fyp-tech" class="form-control" placeholder="React, Node.js, MongoDB"></div>
+          <div class="form-group"><label class="form-label">Project Guide</label><input type="text" id="fyp-guide" class="form-control" placeholder="Guide Name"></div>
+          <div class="form-group"><label class="form-label">Submission Date</label><input type="date" id="fyp-date" class="form-control"></div>
+          <div class="form-group"><label class="form-label">Status</label>
+            <select id="fyp-status" class="form-control">
+              <option value="Submitted">Submitted</option>
+              <option value="Under Review">Under Review</option>
+              <option value="Approved">Approved</option>
+              <option value="Revision Requested">Revision Requested</option>
+            </select>
+          </div>
+          <div class="form-group full"><label class="form-label">Project Description</label><textarea id="fyp-desc" class="form-control" rows="3" placeholder="Brief project overview"></textarea></div>
+          <div class="form-group full">
+            <label class="form-label">Report PDF Document</label>
+            <input type="file" id="fyp-file" class="form-control" accept=".pdf">
+            <small style="color:var(--slate-500);font-size:12px;">Allowed format: PDF only. Max 15 MB.</small>
+          </div>
+        </div>
+        <div class="form-actions" style="margin-top:20px;">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('fyp-modal')">Cancel</button>
+          <button type="submit" id="save-fyp-btn" class="btn btn-primary">Save FYP Report</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Add/Edit Internship Modal -->
+<div id="internship-modal" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div><h3 id="internship-modal-title">Internship Project Report</h3><p>Module 3: Internship details &amp; certificates</p></div>
+      <button class="modal-close" onclick="closeModal('internship-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <form id="internship-form" onsubmit="saveInternship(event)">
+        <input type="hidden" id="int-id">
+        <div class="form-grid">
+          <div class="form-group"><label class="form-label">Student Register Number *</label><input type="text" id="int-regno" class="form-control" required placeholder="REG2022001"></div>
+          <div class="form-group"><label class="form-label">Company Name *</label><input type="text" id="int-company" class="form-control" required placeholder="e.g. TCS, Infosys"></div>
+          <div class="form-group"><label class="form-label">Internship Domain *</label><input type="text" id="int-domain" class="form-control" required placeholder="e.g. Web Development, Cloud"></div>
+          <div class="form-group"><label class="form-label">Internship Project Title *</label><input type="text" id="int-title" class="form-control" required placeholder="Project Name"></div>
+          <div class="form-group"><label class="form-label">Technologies Used</label><input type="text" id="int-tech" class="form-control" placeholder="Python, AWS, React"></div>
+          <div class="form-group"><label class="form-label">Duration *</label><input type="text" id="int-duration" class="form-control" required placeholder="e.g. 3 Months (Jan - Mar)"></div>
+          <div class="form-group"><label class="form-label">Completion Status</label>
+            <select id="int-status" class="form-control">
+              <option value="Completed">Completed</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Submitted">Submitted</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">Submission Date</label><input type="date" id="int-date" class="form-control"></div>
+          <div class="form-group full">
+            <label class="form-label">Report PDF Document</label>
+            <input type="file" id="int-report-file" class="form-control" accept=".pdf">
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Internship Certificate (PDF or Image)</label>
+            <input type="file" id="int-cert-file" class="form-control" accept=".pdf,.png,.jpg,.jpeg">
+          </div>
+        </div>
+        <div class="form-actions" style="margin-top:20px;">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('internship-modal')">Cancel</button>
+          <button type="submit" id="save-int-btn" class="btn btn-primary">Save Internship Report</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Semester Mark Modal -->
+<div id="sem-mark-modal" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div><h3 id="sem-mark-modal-title">Enter Semester Marks</h3><p>Module 4: Semester grade entry</p></div>
+      <button class="modal-close" onclick="closeModal('sem-mark-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <form id="sem-mark-form" onsubmit="saveSemesterMark(event)">
+        <input type="hidden" id="sm-id">
+        <div class="form-grid">
+          <div class="form-group"><label class="form-label">Register Number *</label><input type="text" id="sm-regno" class="form-control" required placeholder="REG2022001" oninput="onSemMarkRegNoInput()"></div>
+          <div class="form-group"><label class="form-label">Batch *</label>
+            <select id="sm-batch" class="form-control" required>
+              <option value="2022-2026">2026 Batch (2022-2026)</option>
+              <option value="2021-2025">2025 Batch (2021-2025)</option>
+              <option value="2020-2024">2024 Batch (2020-2024)</option>
+              <option value="2023-2027">2027 Batch (2023-2027)</option>
+              <option value="2024-2028">2028 Batch (2024-2028)</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">Semester (1 - 6) *</label>
+            <select id="sm-semester" class="form-control" required>
+              <option value="1">Semester 1</option>
+              <option value="2">Semester 2</option>
+              <option value="3">Semester 3</option>
+              <option value="4">Semester 4</option>
+              <option value="5">Semester 5</option>
+              <option value="6">Semester 6</option>
+              <option value="7">Semester 7</option>
+              <option value="8">Semester 8</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">Subject Code *</label><input type="text" id="sm-code" class="form-control" required placeholder="CS8501"></div>
+          <div class="form-group"><label class="form-label">Subject Name *</label><input type="text" id="sm-name" class="form-control" required placeholder="Theory of Computation"></div>
+          <div class="form-group"><label class="form-label">Maximum Marks *</label><input type="number" id="sm-max" class="form-control" required value="100" min="1"></div>
+          <div class="form-group"><label class="form-label">Obtained Marks *</label><input type="number" id="sm-obt" class="form-control" required min="0" placeholder="e.g. 85"></div>
+          <div class="form-group"><label class="form-label">Academic Year *</label><input type="text" id="sm-year" class="form-control" required placeholder="2023-2024"></div>
+          <div class="form-group"><label class="form-label">Result Status</label>
+            <select id="sm-status" class="form-control">
+              <option value="Pass">Pass</option>
+              <option value="Fail">Fail</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-actions" style="margin-top:20px;">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('sem-mark-modal')">Cancel</button>
+          <button type="submit" id="save-sem-mark-btn" class="btn btn-primary">Save Semester Marks</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- CIA Mark Modal -->
+<div id="cia-mark-modal" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div><h3 id="cia-mark-modal-title">Enter CIA Assessment Marks</h3><p>Module 5 &amp; 6: CIA 1, CIA 2, CIA 3</p></div>
+      <button class="modal-close" onclick="closeModal('cia-mark-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <form id="cia-mark-form" onsubmit="saveCiaMark(event)">
+        <input type="hidden" id="cia-id">
+        <div class="form-grid">
+          <div class="form-group"><label class="form-label">Assessment Type *</label>
+            <select id="cia-type" class="form-control" required>
+              <option value="CIA 1">CIA 1</option>
+              <option value="CIA 2">CIA 2</option>
+              <option value="CIA 3">CIA 3</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">Register Number *</label><input type="text" id="cia-regno" class="form-control" required placeholder="REG2022001"></div>
+          <div class="form-group"><label class="form-label">Semester (1 - 8) *</label>
+            <select id="cia-semester" class="form-control" required>
+              <option value="1">Semester 1</option>
+              <option value="2">Semester 2</option>
+              <option value="3">Semester 3</option>
+              <option value="4">Semester 4</option>
+              <option value="5">Semester 5</option>
+              <option value="6">Semester 6</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">Subject Code *</label><input type="text" id="cia-code" class="form-control" required placeholder="CS8501"></div>
+          <div class="form-group"><label class="form-label">Subject Name *</label><input type="text" id="cia-name" class="form-control" required placeholder="Theory of Computation"></div>
+          <div class="form-group"><label class="form-label">Maximum Marks *</label><input type="number" id="cia-max" class="form-control" required value="50" min="1"></div>
+          <div class="form-group"><label class="form-label">Obtained Marks *</label><input type="number" id="cia-obt" class="form-control" required min="0" placeholder="e.g. 42"></div>
+          <div class="form-group"><label class="form-label">Exam Date</label><input type="date" id="cia-date" class="form-control"></div>
+          <div class="form-group"><label class="form-label">Result Status</label>
+            <select id="cia-status" class="form-control">
+              <option value="Pass">Pass</option>
+              <option value="Fail">Fail</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-actions" style="margin-top:20px;">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('cia-mark-modal')">Cancel</button>
+          <button type="submit" id="save-cia-mark-btn" class="btn btn-primary">Save CIA Marks</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Add/Edit Staff Modal -->
+<div id="staff-modal" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div><h3 id="staff-modal-title">Staff Account</h3><p>Manage staff profile &amp; login credentials</p></div>
+      <button class="modal-close" onclick="closeModal('staff-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <form id="staff-form" onsubmit="saveStaff(event)">
+        <input type="hidden" id="staff-id">
+        <div class="form-grid">
+          <div class="form-group"><label class="form-label">Full Name *</label><input type="text" id="staff-name" class="form-control" required placeholder="Dr. Priya Sharma"></div>
+          <div class="form-group"><label class="form-label">Email Address *</label><input type="email" id="staff-email" class="form-control" required placeholder="staff@college.edu"></div>
+          <div class="form-group"><label class="form-label">Department</label><input type="text" id="staff-dept" class="form-control" placeholder="Computer Science"></div>
+          <div class="form-group"><label class="form-label">Phone</label><input type="tel" id="staff-phone" class="form-control" placeholder="9876543210"></div>
+          <div class="form-group" id="staff-password-group"><label class="form-label">Password *</label><input type="password" id="staff-password" class="form-control" placeholder="Default: staff123"></div>
+        </div>
+        <div class="form-actions" style="margin-top:20px;">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('staff-modal')">Cancel</button>
+          <button type="submit" id="save-staff-btn" class="btn btn-primary">Save Staff</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- PDF Preview Modal -->
+<div id="pdf-preview-modal" class="modal-overlay">
+  <div class="modal modal-lg" style="max-width: 950px; height: 90vh; display: flex; flex-direction: column;">
+    <div class="modal-header" style="flex-shrink: 0;">
+      <div><h3 id="pdf-preview-title">Document Preview</h3><p id="pdf-preview-sub">Academic PDF Document</p></div>
+      <button class="modal-close" onclick="closeModal('pdf-preview-modal')">✕</button>
+    </div>
+    <div class="modal-body" style="flex: 1; padding: 0; min-height: 0; background: #1e293b;">
+      <iframe id="pdf-preview-iframe" style="width: 100%; height: 100%; border: none;"></iframe>
+    </div>
+    <div class="modal-footer" style="padding: 12px 24px; border-top: 1px solid var(--slate-100); display: flex; justify-content: flex-end; gap: 10px; background: var(--slate-50);">
+      <button class="btn btn-secondary" onclick="closeModal('pdf-preview-modal')">Close Preview</button>
+    </div>
+  </div>
+</div>
+
+<!-- Student Academic Details Modal (Matches Screenshot) -->
+<div id="student-academic-modal" class="modal-overlay">
+  <div class="modal modal-lg" style="max-width: 820px; border-radius: 20px; overflow: hidden;">
+    <div class="modal-header" style="border-bottom: 1px solid #f1f5f9; padding: 18px 28px;">
+      <div>
+        <h3 style="font-size: 17px; font-weight: 700; color: #0f172a;">Student Academic Details</h3>
+        <p style="font-size: 13px; color: #64748b; margin: 0;">Comprehensive semester marksheet &amp; pass/fail breakdown</p>
+      </div>
+      <button class="modal-close" onclick="closeModal('student-academic-modal')">✕</button>
+    </div>
+    <div class="modal-body" id="student-academic-modal-body" style="padding: 24px 28px; background: #fafafa;">
+      <!-- Populated dynamically -->
+    </div>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+{
+  "name": "college-erp-workspace",
+  "version": "1.0.0",
+  "description": "College ERP Full-Stack Application",
+  "scripts": {
+    "start": "npm --prefix backend start",
+    "dev": "npm --prefix backend run dev",
+    "seed": "npm --prefix backend run seed",
+    "install:backend": "npm --prefix backend install"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.9",
+    "express": "^5.3.0",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.11.4",
+    "multer": "^2.4.0",
+    "serverless-http": "^4.0.0"
+  }
+}

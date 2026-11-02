@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In — College ERP</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .auth-page {
+      background: linear-gradient(135deg, #f0f6ff 0%, #f8fafc 50%, #f0f9ff 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .auth-card {
+      animation: slideUp .35s cubic-bezier(.4, 0, .2, 1);
+      width: 100%;
+      max-width: 440px;
+    }
+
+    .auth-tabs {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-bottom: 20px;
+      background: var(--slate-100);
+      padding: 4px;
+      border-radius: var(--radius-md);
+    }
+
+    .auth-tab {
+      text-align: center;
+      padding: 10px 8px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--slate-600);
+      cursor: pointer;
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+      user-select: none;
+    }
+
+    .auth-tab.active {
+      background: var(--white);
+      color: var(--blue-600);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .demo-creds {
+      background: var(--blue-50);
+      border: 1px solid var(--blue-100);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      margin-bottom: 20px;
+    }
+
+    .demo-creds h4 {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--blue-700);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+
+    .demo-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--slate-600);
+      padding: 2px 0;
+    }
+
+    .demo-row span {
+      font-weight: 600;
+      color: var(--slate-800);
+      font-family: monospace;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="auth-page">
+    <div class="auth-container">
+      <div class="auth-logo">
+        <div class="auth-logo-icon">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+          </svg>
+        </div>
+        <h1>College ERP</h1>
+        <p>Faculty &amp; Student Academic Management System</p>
+      </div>
+
+      <div class="auth-card">
+        <!-- Role Tabs: 2 Roles Only (Staff & Student) -->
+        <div class="auth-tabs">
+          <div class="auth-tab active" data-tab="staff" onclick="switchTab('staff')">Staff</div>
+          <div class="auth-tab" data-tab="student" onclick="switchTab('student')">Student</div>
+        </div>
+
+        <!-- Demo Credentials -->
+        <div class="demo-creds" id="demo-staff">
+          <h4>Demo Staff Credentials</h4>
+          <div class="demo-row">Email <span>staff@college.edu</span></div>
+          <div class="demo-row">Password <span>staff123</span></div>
+        </div>
+        <div class="demo-creds hidden" id="demo-student">
+          <h4>Demo Student Credentials (Reg No &amp; UMIS ID)</h4>
+          <div class="demo-row">Register No <span>24SCC4524</span></div>
+          <div class="demo-row">UMIS ID <span>9002793020</span></div>
+          <div style="font-size:11px;color:var(--slate-500);margin-top:6px;">Student: <strong>Karthick V</strong> (All
+            42 students can log in using their own Reg No &amp; UMIS ID)</div>
+        </div>
+
+        <!-- Error -->
+        <div id="auth-error" class="auth-error hidden" style="margin-bottom:16px;">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span id="auth-error-msg"></span>
+        </div>
+
+        <!-- Login Form -->
+        <form class="auth-form" id="login-form" onsubmit="handleLogin(event)">
+          <div class="auth-form-group">
+            <label for="email" id="login-identifier-label">Email Address</label>
+            <input type="text" id="email" class="auth-input" placeholder="staff@college.edu" required autocomplete="username">
+          </div>
+          <div class="auth-form-group">
+            <label for="password" id="login-secret-label">Password</label>
+            <input type="password" id="password" class="auth-input" placeholder="Enter your password" required autocomplete="current-password">
+          </div>
+          <button type="submit" class="auth-submit" id="login-btn">
+            <span id="login-btn-text">Sign In as Staff</span>
+            <svg id="login-spinner" class="hidden"
+              style="width:18px;height:18px;animation:spin .8s linear infinite;border:2px solid rgba(255,255,255,.4);border-top-color:white;border-radius:50%;"
+              viewBox="0 0 24 24"></svg>
+          </button>
+        </form>
+      </div>
+
+      <div class="auth-footer">
+        <p>© 2026 College ERP · Powered by Node.js &amp; MongoDB</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script>
+    let currentTab = 'staff';
+
+    const defaultEmails = {
+      staff: 'staff@college.edu',
+      student: '24SCC4524'
+    };
+
+    const defaultPass = {
+      staff: 'staff123',
+      student: '9002793020'
+    };
+
+    function switchTab(tab) {
+      currentTab = tab;
+      document.querySelectorAll('.auth-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+      document.getElementById('demo-staff').classList.toggle('hidden', tab !== 'staff');
+      document.getElementById('demo-student').classList.toggle('hidden', tab !== 'student');
+
+      const idLabel = document.getElementById('login-identifier-label');
+      const secretLabel = document.getElementById('login-secret-label');
+      const idInput = document.getElementById('email');
+      const secretInput = document.getElementById('password');
+
+      if (tab === 'student') {
+        if (idLabel) idLabel.textContent = 'Register Number';
+        if (secretLabel) secretLabel.textContent = 'UMIS ID';
+        if (idInput) idInput.placeholder = 'e.g. 24SCC4524';
+        if (secretInput) secretInput.placeholder = 'e.g. 9002793020';
+      } else {
+        if (idLabel) idLabel.textContent = 'Email Address';
+        if (secretLabel) secretLabel.textContent = 'Password';
+        if (idInput) idInput.placeholder = 'staff@college.edu';
+        if (secretInput) secretInput.placeholder = 'Enter your password';
+      }
+
+      const label = tab === 'staff' ? 'Staff' : 'Student';
+      document.getElementById('login-btn-text').textContent = `Sign In as ${label}`;
+
+      // Auto-fill demo credentials for convenience
+      document.getElementById('email').value = defaultEmails[tab] || '';
+      document.getElementById('password').value = defaultPass[tab] || '';
+      clearError();
+    }
+
+    function showError(msg) {
+      document.getElementById('auth-error').classList.remove('hidden');
+      document.getElementById('auth-error-msg').textContent = msg;
+    }
+    function clearError() {
+      document.getElementById('auth-error').classList.add('hidden');
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      clearError();
+      const email = document.getElementById('email').value.trim();
+      const pass = document.getElementById('password').value;
+      const btn = document.getElementById('login-btn');
+      const txt = document.getElementById('login-btn-text');
+      const spin = document.getElementById('login-spinner');
+
+      btn.disabled = true;
+      txt.textContent = 'Signing in…';
+      spin.classList.remove('hidden');
+
+      try {
+        const res = await API.auth.login(email, pass, currentTab);
+        Auth.setToken(res.token);
+        Auth.setUser(res.user);
+
+        if (res.user.role === 'staff') {
+          window.location.href = 'staff-dashboard.html';
+        } else if (res.user.role === 'student') {
+          window.location.href = 'student-dashboard.html';
+        } else {
+          showError('Unauthorized role. Only Staff and Student logins are supported.');
+          btn.disabled = false;
+          txt.textContent = `Sign In as ${currentTab === 'staff' ? 'Staff' : 'Student'}`;
+          spin.classList.add('hidden');
+        }
+      } catch (err) {
+        showError(err.message || 'Authentication failed. Please check credentials.');
+        btn.disabled = false;
+        const label = currentTab === 'staff' ? 'Staff' : 'Student';
+        txt.textContent = `Sign In as ${label}`;
+        spin.classList.add('hidden');
+      }
+    }
+
+    // Check auto-redirect on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = Auth.getUser();
+      const token = Auth.getToken();
+      if (user && token) {
+        if (user.role === 'staff') window.location.href = 'staff-dashboard.html';
+        else if (user.role === 'student') window.location.href = 'student-dashboard.html';
+        else {
+          Auth.clear();
+          switchTab('staff');
+        }
+      } else {
+        // Fill default staff creds
+        switchTab('staff');
+      }
+    });
+  </script>
+</body>
+
+</html>

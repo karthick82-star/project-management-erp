@@ -1,0 +1,16 @@
+[build]
+  publish = "frontend"
+  functions = "netlify/functions"
+
+[functions]
+  included_files = ["backend/uploads/**", "frontend/document/**"]
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/"
+  to = "/login.html"
+  status = 302

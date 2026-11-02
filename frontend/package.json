@@ -1,0 +1,12 @@
+{
+  "name": "college-erp-frontend",
+  "version": "1.0.0",
+  "description": "College ERP Static Frontend Portal",
+  "scripts": {
+    "start": "npx serve -l 3000 .",
+    "dev": "npx serve -l 3000 ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
